@@ -1,0 +1,17 @@
+bin/
+target/
+.*
+.*/
+*.yml
+*.iml
+*.class
+*.exe
+*/**/.*
+*/**/.*/
+*/**/*.yml
+*/**/*.iml
+*/**/*.class
+/vendor/*
+!/vendor/vendor.json
+go.sum
+!.gitignore
