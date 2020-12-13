@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"go-trace/mdl"
+	"go-trace/net"
 )
 
 var param mdl.Param
@@ -36,5 +37,5 @@ func main() {
 	}
 
 	// 处理请求
-
+	net.PressTrace(request, param.Concurrency, param.TotalQuest)
 }

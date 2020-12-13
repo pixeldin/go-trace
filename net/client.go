@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func Send(req *mdl.Request) (resp *http.Response, reqTime uint64, err error) {
+func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
 	client := &http.Client{
 		Timeout: req.Timeout,
 	}
@@ -34,13 +34,16 @@ func Send(req *mdl.Request) (resp *http.Response, reqTime uint64, err error) {
 
 	// timecost
 	begin := time.Now()
-	resp, err = client.Do(request)
+	resp, err := client.Do(request)
 	reqTime = uint64(utils.DiffNano(begin))
 	if err != nil {
-		// TODO... add target of output
+		// TODO: add target of output
 		log.Fatalf("Request err: %v", err)
+		errCode = mdl.RequestErr
 		return
 	}
 
+	// TODO: verify resp
+	errCode, succeed = mdl.VerifyHttp(req, resp)
 	return
 }

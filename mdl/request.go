@@ -9,7 +9,8 @@ import (
 
 // HTTP Resp Code
 const (
-	HTTPOK = 200
+	HTTPOK     = 200
+	RequestErr = -1
 )
 
 type Request struct {
