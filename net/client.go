@@ -5,8 +5,11 @@ import (
 	"go-trace/utils"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
+
+var logger = log.New(os.Stderr, "client:", 0)
 
 func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
 	client := &http.Client{
@@ -38,7 +41,7 @@ func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
 	reqTime = uint64(utils.DiffNano(begin))
 	if err != nil {
 		// TODO: add target of output
-		log.Fatalf("Request err: %v", err)
+		logger.Printf("Request err: %v", err)
 		errCode = mdl.RequestErr
 		return
 	}
