@@ -5,3 +5,11 @@ type RequestResult struct {
 	Succeed bool
 	ErrCode int
 }
+
+type StaticMetric struct {
+	ByNow       uint64
+	ReqCostTime uint64
+	SucCount    uint64
+	FailCount   uint64
+	Concurrency uint64
+}

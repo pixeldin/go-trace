@@ -3,14 +3,16 @@ package net
 import (
 	"go-trace/mdl"
 	"sync"
+	"time"
 )
 
 func PressTrace(req *mdl.Request, con, total uint64) {
 
 	// new routine for calculate
 	var wgReport sync.WaitGroup
+	wgReport.Add(1)
 	resultChannel := make(chan *mdl.RequestResult, 1000)
-	go ReportStat(resultChannel, &wgReport)
+	go ReportStat(con, resultChannel, &wgReport)
 
 	var wg sync.WaitGroup
 	for i := uint64(0); i < con; i++ {
@@ -20,6 +22,7 @@ func PressTrace(req *mdl.Request, con, total uint64) {
 
 	// blocking
 	wg.Wait()
+	time.Sleep(1 * time.Millisecond)
 	close(resultChannel)
 	wgReport.Wait()
 	return
