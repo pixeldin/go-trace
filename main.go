@@ -36,6 +36,6 @@ func main() {
 		return
 	}
 
-	// 处理请求
+	// handle
 	net.PressTrace(request, param.Concurrency, param.TotalQuest)
 }
