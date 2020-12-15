@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func FillInHeaderValue(v string, headers map[string]string) {
+func FillHeader(v string, headers map[string]string) {
 	index := strings.Index(v, ":")
 	if index < 0 {
 		return

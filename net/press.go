@@ -33,11 +33,11 @@ func ProposeHTTP(resultChan chan<- *mdl.RequestResult, req *mdl.Request, total u
 	defer wg.Done()
 
 	for i := uint64(0); i < total; i++ {
-		succeed, code, time := Send(req)
+		succeed, code, sendCost := Send(req)
 
 		// build result
 		reqResult := &mdl.RequestResult{
-			Time:    time,
+			Time:    sendCost,
 			Succeed: succeed,
 			ErrCode: code,
 		}

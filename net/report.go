@@ -18,15 +18,8 @@ func ReportStat(concurrent uint64, ch <-chan *mdl.RequestResult, wg *sync.WaitGr
 
 	var stm = new(mdl.StaticMetric)
 	stm.Concurrency = concurrent
-	//var (
-	//	byNow       uint64
-	//	reqCostTime uint64
-	//	sucCount    uint64
-	//	failCount   uint64
-	//	qps float64
-	//)
 
-	startTime := uint64(time.Now().Nanosecond())
+	startTime := uint64(time.Now().UnixNano())
 
 	// print head
 	PrintHeader()
@@ -40,7 +33,7 @@ func ReportStat(concurrent uint64, ch <-chan *mdl.RequestResult, wg *sync.WaitGr
 				// report ctx canceled
 				return
 			default:
-				stm.ByNow = uint64(time.Now().Nanosecond()) - startTime
+				stm.ByNow = uint64(time.Now().UnixNano()) - startTime
 				// asynchronous print
 				go aggregate(stm)
 			}
@@ -58,22 +51,31 @@ func ReportStat(concurrent uint64, ch <-chan *mdl.RequestResult, wg *sync.WaitGr
 	}
 
 	cancel()
+	stm.ByNow = uint64(time.Now().UnixNano()) - startTime
+	aggregate(stm)
 }
 
-//func aggregate(duration, totalTime, concurrency, sucCount, failCount uint64, qps float64) {
 func aggregate(stat *mdl.StaticMetric) {
 	// print table
 	//result := fmt.Sprintf("costTime│concurrency│successCount│failCount│QPS")
 	qps := float64(stat.SucCount*1e9) / float64(stat.ByNow)
-	result := fmt.Sprintf("%7.0fs│%11d│%12d│%9d|%9.2f\n",
-		float64(stat.ByNow) / 1e9, stat.Concurrency, stat.SucCount, stat.FailCount, qps)
-	fmt.Print(result)
+	result := fmt.Sprintf("%8.2fms│%11d│%12d│%9d|%9.2f",
+		float64(stat.ByNow)/1e6, stat.Concurrency, stat.SucCount, stat.FailCount, qps)
+	fmt.Println(result)
+	return
 }
 
 func PrintHeader() {
 	// TODO: switch output way
-	fmt.Println("\n────────┬───────────┬────────────┬─────────┬─────────")
-	head := fmt.Sprintf("costTime│concurrency│successCount│failCount│   QPS   ")
-	fmt.Println(head)
-	fmt.Println("────────┼───────────┼────────────┼─────────┼─────────")
+	format := `──────────┬───────────┬────────────┬─────────┬─────────
+ costTime │concurrency│successCount│failCount│   QPS   
+──────────┼───────────┼────────────┼─────────┼─────────`
+	fmt.Println(format)
+	return
+
+	//fmt.Println("\n──────────┬───────────┬────────────┬─────────┬─────────")
+	//head := fmt.Sprintf(" costTime │concurrency│successCount│failCount│   QPS   \n" +
+	//	"──────────┼───────────┼────────────┼─────────┼─────────")
+	//fmt.Println(head)
+	//fmt.Println("──────────┼───────────┼────────────┼─────────┼─────────")
 }

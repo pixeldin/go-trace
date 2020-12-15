@@ -12,6 +12,7 @@ import (
 var logger = log.New(os.Stderr, "client:", 0)
 
 func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
+
 	client := &http.Client{
 		Timeout: req.Timeout,
 	}
@@ -22,13 +23,6 @@ func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
 		return
 	}
 
-	//if _, ok := req.Headers["Content-Type"]; !ok {
-	//	if req.Headers == nil {
-	//		req.Headers = make(map[string]string)
-	//	}
-	//	req.Headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
-	//}
-
 	// fill header
 	for k, v := range req.Headers {
 		request.Header.Set(k, v)
@@ -37,7 +31,6 @@ func Send(req *mdl.Request) (succeed bool, errCode int, reqTime uint64) {
 	// default as utf-8
 	if request.Header.Get("Content-Type") == "" {
 		request.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
-		//	req.Headers["Content-Type"] = "application/x-www-form-urlencoded; charset=utf-8"
 	}
 
 	// timecost

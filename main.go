@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"go-trace/mdl"
 	"go-trace/net"
-	"time"
 )
 
 var param mdl.Param
@@ -39,8 +38,5 @@ func main() {
 
 	// handle
 	net.PressTrace(request, param.Concurrency, param.TotalQuest)
-	fmt.Printf("Press finished...")
-	for true {
-		time.Sleep(1)
-	}
+	fmt.Println("Press finished...")
 }

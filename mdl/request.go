@@ -38,7 +38,7 @@ func NewRequest(param Param, timeout time.Duration) (req *Request, err error) {
 	}
 
 	for _, hd := range param.Header {
-		utils.FillInHeaderValue(hd, headers)
+		utils.FillHeader(hd, headers)
 	}
 
 	// verify
